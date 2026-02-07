@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDSTC KHS - Online Examination Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a4d8f;
+            --secondary: #e6af2e;
+            --accent: #c41e3a;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), #2a5caa);
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            border-bottom: 4px solid var(--secondary);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #e6af2e;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .school-info h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        .school-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-buttons button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content Styles */
+        main {
+            min-height: 70vh;
+            padding: 30px 0;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Landing Page Styles */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            border-top: 5px solid var(--secondary);
+        }
+
+        .hero h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #666;
+        }
+
+        .school-motto {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f7ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 350px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+        }
+
+        .auth-box h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(230, 175, 46, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background: #153d75;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #d19b27;
+        }
+
+        .btn-danger {
+            background: var(--accent);
+        }
+
+        .btn-danger:hover {
+            background: #a71e2a;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+
+
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            border: 3px solid var(--secondary);
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-nav button {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .dashboard-nav button:hover, .dashboard-nav button.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .dashboard-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Exam Room Styles */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s;
+            cursor: pointer;
+            border-top: 3px solid transparent;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            border-top-color: var(--secondary);
+        }
+
+        .subject-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subject-card.selected {
+            border-left-color: var(--success);
+            background: #f8fff9;
+        }
+
+        .subject-card .subject-code {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Admin Dashboard Styles */
+        .admin-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .student-table, .questions-table, .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .student-table th, .student-table td,
+        .questions-table th, .questions-table td,
+        .results-table th, .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .student-table th, .questions-table th, .results-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .student-table tr:hover, .questions-table tr:hover, .results-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .edit-btn {
+            background: #f39c12;
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Exam Interface Styles */
+        .exam-container {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            margin-left: 20px;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background: #f0f7ff;
+            border-color: var(--secondary);
+        }
+
+        .option.selected {
+            background: #e7f3ff;
+            border-color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+
+        /* Question Editor */
+        .question-editor {
+            margin-bottom: 20px;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .option-input input {
+            flex: 1;
+        }
+
+        .correct-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Results and Reports */
+        .report-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--success);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .score-breakdown {
+            margin: 30px 0;
+        }
+
+        .print-btn {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+
+
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .footer-logo .mini-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-align: center;
+            line-height: 1;
+            padding: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .auth-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dashboard-nav {
+                justify-content: center;
+            }
+            
+            .admin-controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .student-table, .questions-table, .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .logo-line {
+                font-size: 0.7rem;
+            }
+            
+            .logo-line.main {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media print {
+            header, footer, .dashboard-nav, .nav-buttons {
+                display: none !important;
+            }
+            
+            .report-card {
+                box-shadow: none;
+                border: 2px solid #000;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+<div class="container header-content">
+            <div class="logo-container">
+                <div class="logo">
+                    <!-- PASTE YOUR IMAGE URL HERE -->
+                    <img src="https://ibb.co/XrKL6GYV" alt="GDSTC KHS Logo">
+                </div>
+                <div class="school-info">
+                    <h1>GOVERNMENT DAY SCIENCE TECHNICAL COLLEGE KAFIN-HAUSA</h1>
+            <p>GDSTC KHS</p>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button id="homeBtn"><i class="fas fa-home"></i> Home</button>
+                <button id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Landing Page -->
+        <div id="landingPage" class="page active">
+            <div class="hero">
+                <h2>Welcome to GDSTC KHS Examination Portal</h2>
+                <p>An online examination platform for Government Day Science Technical College Kafin-Hausa. This is mission to engage students work on the job experience to overcome challenges of using Media/Internet, It will enhance the student's capabilities on the global development.</p>
+                <div class="school-motto">
+                    <i class="fas fa-quote-left"></i> "Empowering Students, Enriching Communities" <i class="fas fa-quote-right"></i>
+                </div>
+            </div>
+            
+            <div class="auth-container">
+                <div class="auth-box">
+                    <h3><i class="fas fa-user-graduate"></i> Student Login</h3>
+                    <form id="studentLoginForm">
+                        <div class="form-group">
+                            <label for="studentName">Full Name (as registered)</label>
+                            <input type="text" id="studentName" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminNumber">Administration Number</label>
+                            <input type="text" id="adminNumber" placeholder="e.g., STEB/GDSTCKHS/2023/001" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-sign-in-alt"></i> Login to Student Dashboard
+                        </button>
+                    </form>
+                    <div style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
+                        
+                    </div>
+                </div>
+                
+                <div class="auth-box">
+                    <h3><i class="fas fa-user-shield"></i> Administrator Login</h3>
+                    <form id="adminLoginForm">
+                        <div class="form-group">
+                            <label for="adminUsername">Username</label>
+                            <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPassword">Password</label>
+                            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-lock"></i> Login as Administrator
+                        </button>
+                    </form>
+                    <div style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
+                        <p>Note: <strong>Don't try to login in the admin dashboard unless you're required</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="page">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <h3 id="studentGreeting">Welcome, Student</h3>
+                        <p id="studentAdminNumber">Administration Number: </p>
+                        <p id="studentClass" style="font-size: 0.9rem; color: #666;">Class: </p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-danger" id="studentLogoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard-nav">
+                <button id="profileBtn" class="active">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </button>
+                <button id="timetableBtn">
+                    <i class="fas fa-calendar-alt"></i> Exam Timetable
+                </button>
+                <button id="examRoomBtn">
+                    <i class="fas fa-door-open"></i> Examination Room
+                </button>
+                <button id="resultsBtn">
+                    <i class="fas fa-chart-bar"></i> Results & Reports
+                </button>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- Profile Content -->
+                <div id="profileContent" class="dashboard-section">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-id-card"></i> Student Profile
+                    </h3>
+                    <div class="student-details">
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-user"></i> Full Name:</strong><br><span id="profileName">-</span></p>
+                        </div>
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-id-badge"></i> Admin Number:</strong><br><span id="profileAdminNumber">-</span></p>
+                        </div>
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-graduation-cap"></i> Class:</strong><br><span id="profileClass">-</span></p>
+                        </div>
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-calendar"></i> Academic Year:</strong><br><span id="profileYear">2023/2024 Session</span></p>
+                        </div>
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-check-circle"></i> Exams Taken:</strong><br><span id="examsCompleted">0</span></p>
+                        </div>
+                        <div class="detail-item">
+                            <p><strong><i class="fas fa-star"></i> Average Score:</strong><br><span id="averageScore">-</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+
+  <!-- Timetable Content -->
+                <div id="timetableContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-calendar-check"></i> Examination Timetable
+                    </h3>
+                    <p style="margin-bottom: 20px;">Below is your examination schedule for the current term.</p>
+                    
+                    <div class="timetable">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Subject</th>
+                                    <th>Subject Code</th>
+                                    <th>Duration</th>
+                                    <th>Venue</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                                <!-- Timetable will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Exam Room Content -->
+                <div id="examRoomContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-laptop-code"></i> Examination Room
+                    </h3>
+                    <p>Select a subject to begin your examination.</p>
+                    
+                    <div class="form-group" style="margin: 20px 0;">
+                        <label for="subjectSearch"><i class="fas fa-search"></i> Search Subject</label>
+                        <input type="text" id="subjectSearch" placeholder="Type to search for a subject">
+                    </div>
+                    
+                    <h4 style="margin-top: 30px; margin-bottom: 15px;">Available Examination Subjects</h4>
+                    <div class="subject-grid" id="subjectGrid">
+                        <!-- Subjects will be populated here -->
+                    </div>
+                    
+                    <div id="selectedSubjectInfo" style="display: none; margin-top: 30px; padding: 25px; background: #f8f9fa; border-radius: 10px; border-left: 5px solid var(--success);">
+                        <h4 style="color: var(--success); margin-bottom: 15px;">
+                            <i class="fas fa-check-circle"></i> Ready to Start Examination
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            <div>
+                                <p><strong>Selected Subject:</strong><br><span id="selectedSubjectName" style="font-size: 1.1rem; color: var(--primary);">-</span></p>
+                            </div>
+                            <div>
+                                <p><strong>Subject Code:</strong><br><span id="selectedSubjectCode" style="font-weight: bold;">-</span></p>
+                            </div>
+                            <div>
+                                <p><strong>Exam Duration:</strong><br><span id="selectedSubjectDuration" style="font-weight: bold;">- minutes</span></p>
+                            </div>
+                        </div>
+                        <button id="startExamBtn" class="btn btn-success" style="font-size: 1.1rem;">
+                            <i class="fas fa-play-circle"></i> Start Examination Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Results Content -->
+                <div id="resultsContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-chart-line"></i> Examination Results
+                    </h3>
+                    
+                    <div id="resultsContainer">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="page">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="user-avatar" style="background: var(--accent);">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <h3>Administrator Dashboard</h3>
+                        <p>Government Day Science Technical College Kafin-Hausa</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-danger" id="adminLogoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard-nav">
+                <button id="manageStudentsBtn" class="active">
+                    <i class="fas fa-users"></i> Manage Students
+                </button>
+                <button id="manageExamsBtn">
+                    <i class="fas fa-book"></i> Manage Exams
+                </button>
+                <button id="manageQuestionsBtn">
+                    <i class="fas fa-question-circle"></i> Manage Questions
+                </button>
+                <button id="viewResultsBtn">
+                    <i class="fas fa-chart-pie"></i> View Results
+                </button>
+                <button id="systemSettingsBtn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- Manage Students Content -->
+                <div id="manageStudentsContent" class="dashboard-section">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-user-graduate"></i> Student Management
+                    </h3>
+                    <div class="admin-controls">
+                        <button class="btn btn-secondary" id="addStudentBtn">
+                            <i class="fas fa-user-plus"></i> Add New Student
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="studentSearch" placeholder="Search students by name, admin number, or class">
+                        </div>
+                    </div>
+                    
+                    <div class="students-table">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>Admin Number</th>
+                                    <th>Full Name</th>
+                                    <th>Class</th>
+                                    <th>Exams Taken</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Students will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Manage Exams Content -->
+                <div id="manageExamsContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-file-alt"></i> Examination Management
+                    </h3>
+                    <div class="admin-controls">
+                        <button class="btn btn-secondary" id="addExamBtn">
+                            <i class="fas fa-plus-circle"></i> Add New Examination
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="examSearch" placeholder="Search examinations by subject or code">
+                        </div>
+                    </div>
+                    
+                    <div class="exams-table">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Subject Code</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Total Questions</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="examsTableBody">
+                                <!-- Exams will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Manage Questions Content -->
+                <div id="manageQuestionsContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-edit"></i> Question Bank Management
+                    </h3>
+                    <div class="admin-controls">
+                        <div>
+                            <label for="questionSubject">Select Subject:</label>
+                            <select id="questionSubject" style="width: 200px; margin-left: 10px;">
+                                <option value="">-- Select Subject --</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" id="addQuestionBtn">
+                            <i class="fas fa-plus-circle"></i> Add New Question
+                        </button>
+                    </div>
+                    
+                    <div class="questions-table">
+                        <table class="questions-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Question</th>
+                                    <th>Options</th>
+                                    <th>Correct Answer</th>
+                                    <th>Marks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="questionsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 30px; color: #666;">
+                                        Select a subject to view questions
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- View Results Content -->
+                <div id="viewResultsContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-chart-bar"></i> Examination Results
+                    </h3>
+                    <div class="admin-controls">
+                        <div>
+                            <label for="resultSubject">Filter by Subject:</label>
+                            <select id="resultSubject" style="width: 200px; margin-left: 10px;">
+                                <option value="">All Subjects</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="resultClass">Filter by Class:</label>
+                            <select id="resultClass" style="width: 150px; margin-left: 10px;">
+                                <option value="">All Classes</option>
+                                <option value="SS1">SS1</option>
+                                <option value="SS2">SS2</option>
+                                <option value="SS3">SS3</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="results-table">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Admin Number</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminResultsBody">
+                                <!-- Results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- System Settings Content -->
+                <div id="systemSettingsContent" class="dashboard-section" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-sliders-h"></i> System Configuration
+                    </h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="systemName">Institution Name</label>
+                            <input type="text" id="systemName" value="Government Day Science Technical College Kafin-Hausa">
+                        </div>
+                        <div class="form-group">
+                            <label for="academicYear">Academic Year</label>
+                            <input type="text" id="academicYear" value="2023/2024 Session">
+                        </div>
+                        <div class="form-group">
+                            <label for="passingScore">Passing Score (%)</label>
+                            <input type="number" id="passingScore" value="40" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="examDuration">Default Exam Duration (minutes)</label>
+                            <input type="number" id="examDuration" value="60" min="15" max="180">
+                        </div>
+                        <button class="btn" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Exam Interface -->
+        <div id="examInterface" class="page">
+            <div class="exam-header">
+                <div>
+                    <h3 id="examSubjectTitle">Examination</h3>
+                    <p id="examInstructions">Answer all questions. Time will be submitted automatically when time ends.</p>
+                </div>
+                <div class="timer">
+                    <i class="fas fa-clock"></i> Time Left: <span id="examTimer">60:00</span>
+                </div>
+            </div>
+            
+            <div class="exam-container">
+                <div id="examQuestionsContainer">
+                    <!-- Questions will be loaded here -->
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Questions Answered:</strong> <span id="answeredCount">0</span> / <span id="totalQuestions">0</span>
+                        </div>
+                        <div>
+                            <button id="submitExamBtn" class="btn btn-success">
+                                <i class="fas fa-paper-plane"></i> Submit Examination
+                            </button>
+                            <button id="cancelExamBtn" class="btn btn-danger" style="margin-left: 10px;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Sheet -->
+        <div id="reportSheet" class="page">
+            <div class="report-card">
+                <div class="report-header">
+                    <h2 style="color: var(--primary);">GOVERNMENT DAY SCIENCE TECHNICAL COLLEGE KAFIN-HAUSA</h2>
+                    <h3 style="color: var(--accent); margin: 10px 0;">EXAMINATION REPORT SHEET</h3>
+                    <p style="color: #666;">Academic Year: <span id="reportAcademicYear">2023/2024 Session</span></p>
+                </div>
+                
+                <div class="student-details">
+                    <div class="detail-item">
+                        <p><strong>Student Name:</strong><br><span id="reportStudentName">-</span></p>
+                    </div>
+                    <div class="detail-item">
+                        <p><strong>Administration Number:</strong><br><span id="reportAdminNumber">-</span></p>
+                    </div>
+                    <div class="detail-item">
+                        <p><strong>Class:</strong><br><span id="reportClass">-</span></p>
+                    </div>
+                    <div class="detail-item">
+                        <p><strong>Examination Date:</strong><br><span id="reportExamDate">-</span></p>
+                    </div>
+                </div>
+                
+                <div class="score-breakdown">
+                    <h4 style="color: var(--primary); margin-bottom: 15px;">Examination Results</h4>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Total Marks</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportResultsBody">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin: 30px 0; padding: 20px; background: #f0f7ff; border-radius: 8px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div>
+                            <p><strong>Total Score:</strong> <span id="reportTotalScore">-</span></p>
+                        </div>
+                        <div>
+                            <p><strong>Average Percentage:</strong> <span id="reportAverage">-</span></p>
+                        </div>
+                        <div>
+                            <p><strong>Overall Grade:</strong> <span id="reportOverallGrade">-</span></p>
+                        </div>
+                        <div>
+                            <p><strong>Position in Class:</strong> <span id="reportPosition">-</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                        <div>
+                            <p><strong>Class Teacher's Signature:</strong></p>
+                            <div style="height: 50px; border-bottom: 1px solid #ccc; width: 200px;"></div>
+                        </div>
+                        <div>
+                            <p><strong>Principal's Signature:</strong></p>
+                            <div style="height: 50px; border-bottom: 1px solid #ccc; width: 200px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="print-btn">
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <i class="fas fa-print"></i> Print Report Sheet
+                    </button>
+                    <button onclick="showStudentDashboard()" class="btn" style="margin-left: 10px;">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Student</h3>
+                <button class="close-modal" id="closeStudentModal">&times;</button>
+            </div>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="modalAdminNumber">Administration Number</label>
+                    <input type="text" id="modalAdminNumber" placeholder="GDSTC/2023/001" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalStudentName">Full Name</label>
+                    <input type="text" id="modalStudentName" placeholder="Enter student's full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalStudentClass">Class</label>
+                    <select id="modalStudentClass">
+                        <option value="SS1BLD">Building (SS1)</option>
+                
+                        <option value="SS2BLD">Building (SS2)</option>
+
+                        <option value="SS3BLD">Building (SS3)</option>
+
+
+
+
+
+
+
+
+
+
+
+     
+                        <option value="SS1CJ">Carpentry and Joinery (SS1)</option>
+     
+                        <option value="SS2CJ">Carpentry and Joinery (SS2)</option>
+
+     
+                        <option value="SS3CJ">Carpentry and Joinery (SS3)</option>
+
+
+
+     
+                        <option value="SS1CTR">Catering (SS1)</option>
+                        <option value="SS2CTR">Catering (SS2)</option>
+                          <option value="SS3CTR">Catering (SS3)</option>
+  
+
+
+<option value="SS1EM">Electronics Maintenance (SS1)</option>
+                        
+
+<option value="SS2EM">Electronics Maintenance (SS2)</option>
+
+
+<option value="SS3EM">Electronics Maintenance (SS3)</option>
+
+
+                        <option value="SS1FSH">Fishing (SS1)</option>
+
+                        <option value="SS2FSH">Fishing (SS2)</option>
+                        <option value="SS3FSH" selected>Fishing (SS3)</option>
+
+                    </select>
+                </div>
+                <button type="submit" class="btn" id="modalSubmitBtn">
+                    <i class="fas fa-save"></i> Save Student
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="examModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="examModalTitle">Add New Examination</h3>
+                <button class="close-modal" id="closeExamModal">&times;</button>
+            </div>
+            <form id="examForm">
+                <div class="form-group">
+                    <label for="modalExamSubject">Subject Name</label>
+                    <input type="text" id="modalExamSubject" placeholder="e.g., Mathematics" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalExamCode">Subject Code</label>
+                    <input type="text" id="modalExamCode" placeholder="e.g., MATH101" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalExamDuration">Duration (minutes)</label>
+                    <input type="number" id="modalExamDuration" min="15" max="180" value="60" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalTotalQuestions">Total Questions</label>
+                    <input type="number" id="modalTotalQuestions" min="5" max="100" value="20" required>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Save Examination
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="questionModalTitle">Add/Edit Question</h3>
+                <button class="close-modal" id="closeQuestionModal">&times;</button>
+            </div>
+            <form id="questionForm">
+                <div class="form-group">
+                    <label for="modalQuestionText">Question Text</label>
+                    <textarea id="modalQuestionText" rows="3" placeholder="Enter the question..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Options (Mark the correct answer)</label>
+                    <div id="optionsContainer">
+                        <!-- Options will be added here -->
+                    </div>
+                    <button type="button" id="addOptionBtn" class="btn-sm" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Add Option
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modalQuestionMarks">Marks</label>
+                    <input type="number" id="modalQuestionMarks" min="1" max="10" value="5" required>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Save Question
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <div class="mini-logo">
+                    <div>DAY</div>
+                    <div>TECH</div>
+                </div>
+                <span>GDSTC KHS Examination Portal</span>
+            </div>
+            <div>
+                <p>&copy; 2026 Government Day Science Technical College Kafin-Hausa. All rights reserved.</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    <i class="fas fa-envelope"></i> exams@gdstckhs.edu.ng
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // ==================== COMPLETE EXAMINATION SYSTEM ====================
+        
+        // Database with all data
+        const gdstcSystem = {
+            // School Information
+            school: {
+                name: "Government Day Science Technical College Kafin-Hausa",
+                abbreviation: "GDSTC KHS",
+                motto: "Empowering Students, Enriching Communities.",
+                academicYear: "2025/2026 Session",
+                passingScore: 40,
+                defaultExamDuration: 60
+            },
+            
+            // Students Data
+            students: [
+                { 
+                    id: 1, 
+                    adminNumber: "GDSTC/2023/001", 
+                    name: "John Chukwuma", 
+                    class: "SS3", 
+                    status: "active", 
+                    examsTaken: 2,
+                    password: "student123"
+                },
+                { 
+                    id: 2, 
+                    adminNumber: "GDSTC/2023/002", 
+                    name: "Fatima Abdul", 
+                    class: "SS3", 
+                    status: "active", 
+                    examsTaken: 1,
+                    password: "student123"
+                },
+                { 
+                    id: 3, 
+                    adminNumber: "GDSTC/2023/003", 
+                    name: "James Okafor", 
+                    class: "SS2", 
+                    status: "active", 
+                    examsTaken: 0,
+                    password: "student123"
+                }
+            ],
+            
+            // Admin Credentials
+            adminCredentials: { 
+                username: "gdstckafin-hausa", 
+                password: "38803091@Khs" 
+            },
+            
+            // Subjects and Exams
+            subjects: [
+                { id: 1, name: "Mathematics", code: "MATH301", duration: 60, totalQuestions: 20 },
+                { id: 2, name: "English Language", code: "ENG302", duration: 90, totalQuestions: 25 },
+                { id: 3, name: "Physics", code: "PHY303", duration: 75, totalQuestions: 20 },
+                { id: 4, name: "Chemistry", code: "CHEM304", duration: 75, totalQuestions: 20 },
+                { id: 5, name: "Biology", code: "BIO305", duration: 75, totalQuestions: 20 }
+            ],
+            
+            // Question Bank
+            questions: [
+                // Mathematics Questions
+                {
+                    id: 1,
+                    subjectId: 1,
+                    question: "What is the value of π (pi) rounded to two decimal places?",
+                    options: ["3.14", "3.16", "3.18", "3.12"],
+                    correctAnswer: 0,
+                    marks: 5
+                },
+                {
+                    id: 2,
+                    subjectId: 1,
+                    question: "Solve for x: 2x + 5 = 15",
+                    options: ["x = 5", "x = 10", "x = 7.5", "x = 8"],
+                    correctAnswer: 0,
+                    marks: 5
+                },
+                {
+                    id: 3,
+                    subjectId: 2,
+                    question: "Which of these is a noun?",
+                    options: ["Run", "Beautiful", "Quickly", "House"],
+                    correctAnswer: 3,
+                    marks: 4
+                },
+                {
+                    id: 4,
+                    subjectId: 2,
+                    question: "Choose the correct spelling:",
+                    options: ["Accommodation", "Acommodation", "Accomodation", "Acomodation"],
+                    correctAnswer: 0,
+                    marks: 4
+                },
+                {
+                    id: 5,
+                    subjectId: 3,
+                    question: "What is the SI unit of force?",
+                    options: ["Joule", "Newton", "Watt", "Pascal"],
+                    correctAnswer: 1,
+                    marks: 5
+                }
+            ],
+            
+            // Student Exam Results
+            results: [
+                {
+                    id: 1,
+                    studentId: 1,
+                    subjectId: 1,
+                    subjectName: "Mathematics",
+                    score: 85,
+                    totalMarks: 100,
+                    percentage: 85,
+                    grade: "A",
+                    remark: "Excellent",
+                    date: "2023-11-15",
+                    answers: [
+                        { questionId: 1, selectedOption: 0, correct: true },
+                        { questionId: 2, selectedOption: 0, correct: true }
+                    ]
+                },
+                {
+                    id: 2,
+                    studentId: 1,
+                    subjectId: 2,
+                    subjectName: "English Language",
+                    score: 72,
+                    totalMarks: 100,
+                    percentage: 72,
+                    grade: "B",
+                    remark: "Good",
+                    date: "2023-11-16",
+                    answers: [
+                        { questionId: 3, selectedOption: 3, correct: true },
+                        { questionId: 4, selectedOption: 0, correct: true }
+                    ]
+                },
+                {
+                    id: 3,
+                    studentId: 2,
+                    subjectId: 1,
+                    subjectName: "Mathematics",
+                    score: 65,
+                    totalMarks: 100,
+                    percentage: 65,
+                    grade: "C",
+                    remark: "Credit",
+                    date: "2023-11-15",
+                    answers: []
+                }
+            ],
+            
+            // System State
+            currentUser: null,
+            currentStudent: null,
+            currentExam: null,
+            selectedSubject: null,
+            examTimer: null,
+            examTimeLeft: 0,
+            studentAnswers: []
+        };
+
+        // DOM Elements
+        const pages = {
+            landing: document.getElementById('landingPage'),
+            studentDashboard: document.getElementById('studentDashboard'),
+            adminDashboard: document.getElementById('adminDashboard'),
+            examInterface: document.getElementById('examInterface'),
+            reportSheet: document.getElementById('reportSheet')
+        };
+
+        // ========== AUTHENTICATION FUNCTIONS ==========
+        
+        // Student Login
+        document.getElementById('studentLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value.trim();
+            const adminNumber = document.getElementById('adminNumber').value.trim();
+            
+            const student = gdstcSystem.students.find(s => 
+                s.name.toLowerCase() === name.toLowerCase() && 
+                s.adminNumber === adminNumber
+            );
+            
+            if (student) {
+                if (student.status === "inactive") {
+                    alert("Your account is inactive. Please contact administrator.");
+                    return;
+                }
+                
+                gdstcSystem.currentStudent = student;
+                gdstcSystem.currentUser = "student";
+                showStudentDashboard();
+            } else {
+                alert("Invalid credentials. Use: John Chukwuma / GDSTC/2023/001");
+            }
+        });
+
+        // Admin Login
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+            
+            if (username === gdstcSystem.adminCredentials.username && 
+                password === gdstcSystem.adminCredentials.password) {
+                gdstcSystem.currentUser = "admin";
+                showAdminDashboard();
+            } else {
+                alert("Invalid credentials. Use: admin / admin123");
+            }
+        });
+
+
+
+
+        // ========== STUDENT DASHBOARD FUNCTIONS ==========
+        
+        function showStudentDashboard() {
+            showPage('studentDashboard');
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            
+            const student = gdstcSystem.currentStudent;
+            
+            // Update student info
+            document.getElementById('studentGreeting').textContent = `Welcome, ${student.name}`;
+            document.getElementById('studentAdminNumber').textContent = `Admin Number: ${student.adminNumber}`;
+            document.getElementById('studentClass').textContent = `Class: ${student.class}`;
+            
+            // Update profile
+            document.getElementById('profileName').textContent = student.name;
+            document.getElementById('profileAdminNumber').textContent = student.adminNumber;
+            document.getElementById('profileClass').textContent = student.class;
+            document.getElementById('profileYear').textContent = gdstcSystem.school.academicYear;
+            document.getElementById('examsCompleted').textContent = student.examsTaken;
+            
+            // Calculate average score
+            const studentResults = gdstcSystem.results.filter(r => r.studentId === student.id);
+            if (studentResults.length > 0) {
+                const totalScore = studentResults.reduce((sum, result) => sum + result.percentage, 0);
+                const averageScore = Math.round(totalScore / studentResults.length);
+                document.getElementById('averageScore').textContent = `${averageScore}%`;
+            } else {
+                document.getElementById('averageScore').textContent = "No results yet";
+            }
+            
+            // Load initial content
+            loadTimetable();
+        }
+
+        // Student Dashboard Navigation
+        document.getElementById('profileBtn').addEventListener('click', () => {
+            activateButton('profileBtn', '.dashboard-nav button');
+            showDashboardSection('profileContent');
+        });
+        
+        document.getElementById('timetableBtn').addEventListener('click', () => {
+            activateButton('timetableBtn', '.dashboard-nav button');
+            showDashboardSection('timetableContent');
+            loadTimetable();
+        });
+        
+        document.getElementById('examRoomBtn').addEventListener('click', () => {
+            activateButton('examRoomBtn', '.dashboard-nav button');
+            showDashboardSection('examRoomContent');
+            loadSubjectsForExam();
+        });
+        
+        document.getElementById('resultsBtn').addEventListener('click', () => {
+            activateButton('resultsBtn', '.dashboard-nav button');
+            showDashboardSection('resultsContent');
+            loadStudentResults();
+        });
+
+        function loadTimetable() {
+            const timetableBody = document.getElementById('timetableBody');
+            timetableBody.innerHTML = '';
+            
+            gdstcSystem.subjects.forEach((subject, index) => {
+                const date = new Date();
+                date.setDate(date.getDate() + index + 1);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>9:00 AM</td>
+                    <td>${subject.name}</td>
+                    <td>${subject.code}</td>
+                    <td>${subject.duration} mins</td>
+                    <td>Room ${101 + index}</td>
+                `;
+                timetableBody.appendChild(row);
+            });
+        }
+
+        function loadSubjectsForExam() {
+            const subjectGrid = document.getElementById('subjectGrid');
+            subjectGrid.innerHTML = '';
+            
+            gdstcSystem.subjects.forEach(subject => {
+                // Check if student already took this exam
+                const hasTaken = gdstcSystem.results.some(r => 
+                    r.studentId === gdstcSystem.currentStudent.id && 
+                    r.subjectId === subject.id
+                );
+                
+                const subjectCard = document.createElement('div');
+                subjectCard.className = 'subject-card';
+                subjectCard.dataset.subjectId = subject.id;
+                subjectCard.innerHTML = `
+                    <h4>${subject.name} <span class="subject-code">${subject.code}</span></h4>
+                    <p><strong>Duration:</strong> ${subject.duration} minutes</p>
+                    <p><strong>Questions:</strong> ${subject.totalQuestions}</p>
+                    <p><strong>Status:</strong> 
+                        <span style="color: ${hasTaken ? 'green' : 'orange'}; font-weight: bold;">
+                            ${hasTaken ? 'Completed' : 'Available'}
+                        </span>
+                    </p>
+                `;
+                
+                if (!hasTaken) {
+                    subjectCard.addEventListener('click', function() {
+                        document.querySelectorAll('.subject-card').forEach(card => {
+                            card.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        
+                        gdstcSystem.selectedSubject = subject;
+                        
+                        document.getElementById('selectedSubjectInfo').style.display = 'block';
+                        document.getElementById('selectedSubjectName').textContent = subject.name;
+                        document.getElementById('selectedSubjectCode').textContent = subject.code;
+                        document.getElementById('selectedSubjectDuration').textContent = subject.duration;
+                        
+                        document.getElementById('startExamBtn').disabled = false;
+                        document.getElementById('startExamBtn').innerHTML = '<i class="fas fa-play-circle"></i> Start Examination Now';
+                    });
+                } else {
+                    subjectCard.style.opacity = '0.7';
+                    subjectCard.style.cursor = 'not-allowed';
+                }
+                
+                subjectGrid.appendChild(subjectCard);
+            });
+            
+            // Search functionality
+            document.getElementById('subjectSearch').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('.subject-card').forEach(card => {
+                    const subjectText = card.textContent.toLowerCase();
+                    card.style.display = subjectText.includes(searchTerm) ? 'block' : 'none';
+                });
+            });
+            
+            // Start exam button
+            document.getElementById('startExamBtn').addEventListener('click', startExam);
+        }
+
+        function startExam() {
+            if (!gdstcSystem.selectedSubject) {
+                alert("Please select a subject first.");
+                return;
+            }
+            
+            gdstcSystem.currentExam = gdstcSystem.selectedSubject;
+            gdstcSystem.studentAnswers = [];
+            gdstcSystem.examTimeLeft = gdstcSystem.currentExam.duration * 60;
+            
+            // Load exam questions
+            loadExamQuestions();
+            
+            // Show exam interface
+            showPage('examInterface');
+            
+            // Start timer
+            updateExamTimer();
+            gdstcSystem.examTimer = setInterval(updateExamTimer, 1000);
+            
+            // Setup exam controls
+            document.getElementById('submitExamBtn').addEventListener('click', submitExam);
+            document.getElementById('cancelExamBtn').addEventListener('click', () => {
+                if (confirm("Are you sure you want to cancel the exam? Your progress will be lost.")) {
+                    clearInterval(gdstcSystem.examTimer);
+                    showStudentDashboard();
+                }
+            });
+        }
+
+
+
+
+        function loadExamQuestions() {
+            const container = document.getElementById('examQuestionsContainer');
+            container.innerHTML = '';
+            
+            const subjectQuestions = gdstcSystem.questions.filter(q => q.subjectId === gdstcSystem.currentExam.id);
+            
+            document.getElementById('examSubjectTitle').textContent = `${gdstcSystem.currentExam.name} Examination`;
+            document.getElementById('totalQuestions').textContent = subjectQuestions.length;
+            
+            if (subjectQuestions.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ffc107;"></i>
+                        <h3>No Questions Available</h3>
+                        <p>This exam doesn't have any questions yet. Please contact your teacher.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            subjectQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${index + 1} (${question.marks} marks)</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-container">
+                        ${question.options.map((option, optIndex) => `
+                            <div class="option" data-question="${question.id}" data-option="${optIndex}">
+                                ${String.fromCharCode(65 + optIndex)}. ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionId = parseInt(this.dataset.question);
+                    const selectedOption = parseInt(this.dataset.option);
+                    
+                    // Remove selected class from other options in this question
+                    const questionContainer = this.closest('.question-container');
+                    questionContainer.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Save answer
+                    const existingAnswer = gdstcSystem.studentAnswers.find(a => a.questionId === questionId);
+                    if (existingAnswer) {
+                        existingAnswer.selectedOption = selectedOption;
+                    } else {
+                        gdstcSystem.studentAnswers.push({
+                            questionId,
+                            selectedOption,
+                            correct: false // Will be checked during submission
+                        });
+                    }
+                    
+                    // Update answered count
+                    updateAnsweredCount();
+                });
+            });
+        }
+
+        function updateExamTimer() {
+            gdstcSystem.examTimeLeft--;
+            
+            if (gdstcSystem.examTimeLeft <= 0) {
+                clearInterval(gdstcSystem.examTimer);
+                submitExam();
+                return;
+            }
+            
+            const minutes = Math.floor(gdstcSystem.examTimeLeft / 60);
+            const seconds = gdstcSystem.examTimeLeft % 60;
+            document.getElementById('examTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateAnsweredCount() {
+            const totalQuestions = gdstcSystem.questions.filter(q => q.subjectId === gdstcSystem.currentExam.id).length;
+            document.getElementById('answeredCount').textContent = gdstcSystem.studentAnswers.length;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+        }
+
+        function submitExam() {
+            clearInterval(gdstcSystem.examTimer);
+            
+            const subjectQuestions = gdstcSystem.questions.filter(q => q.subjectId === gdstcSystem.currentExam.id);
+            
+            // Calculate score
+            let score = 0;
+            let totalMarks = 0;
+            
+            gdstcSystem.studentAnswers.forEach(answer => {
+                const question = subjectQuestions.find(q => q.id === answer.questionId);
+                if (question) {
+                    totalMarks += question.marks;
+                    if (answer.selectedOption === question.correctAnswer) {
+                        score += question.marks;
+                        answer.correct = true;
+                    }
+                }
+            });
+            
+            // Calculate percentage
+            const percentage = totalMarks > 0 ? Math.round((score / totalMarks) * 100) : 0;
+            
+            // Determine grade
+            let grade = 'F';
+            let remark = 'Fail';
+            
+            if (percentage >= 70) { grade = 'A'; remark = 'Excellent'; }
+            else if (percentage >= 60) { grade = 'B'; remark = 'Good'; }
+            else if (percentage >= 50) { grade = 'C'; remark = 'Credit'; }
+            else if (percentage >= 40) { grade = 'D'; remark = 'Pass'; }
+            else if (percentage >= 30) { grade = 'E'; remark = 'Weak Pass'; }
+            
+            // Save result
+            const resultId = gdstcSystem.results.length > 0 ? Math.max(...gdstcSystem.results.map(r => r.id)) + 1 : 1;
+            const newResult = {
+                id: resultId,
+                studentId: gdstcSystem.currentStudent.id,
+                subjectId: gdstcSystem.currentExam.id,
+                subjectName: gdstcSystem.currentExam.name,
+                score,
+                totalMarks,
+                percentage,
+                grade,
+                remark,
+                date: new Date().toISOString().split('T')[0],
+                answers: [...gdstcSystem.studentAnswers]
+            };
+            
+            gdstcSystem.results.push(newResult);
+            
+            // Update student's exams taken
+            gdstcSystem.currentStudent.examsTaken++;
+            
+            // Show result
+            alert(`Examination submitted!\n\nScore: ${score}/${totalMarks} (${percentage}%)\nGrade: ${grade}\nRemark: ${remark}`);
+            
+            // Generate and show report
+            generateReport([newResult]);
+        }
+
+        function loadStudentResults() {
+            const container = document.getElementById('resultsContainer');
+            const studentResults = gdstcSystem.results.filter(r => r.studentId === gdstcSystem.currentStudent.id);
+            
+            if (studentResults.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #ccc;"></i>
+                        <h3>No Results Yet</h3>
+                        <p>You haven't taken any examinations yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div style="margin-bottom: 30px;">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Date</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Remark</th>
+                                <th>Action</th>
+      </tr>
+            </thead>
+                 <tbody> `;
+
+
+studentResults.forEach(result => {
+                html += `
+                    <tr>
+                        <td>${result.subjectName}</td>
+                        <td>${result.date}</td>
+                        <td>${result.score}/${result.totalMarks}</td>
+                        <td>${result.percentage}%</td>
+                        <td><strong>${result.grade}</strong></td>
+                        <td>${result.remark}</td>
+                        <td>
+                            <button onclick="viewSingleReport(${result.id})" class="btn-sm">
+                                <i class="fas fa-download"></i> View Report
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center;">
+                    <button onclick="generateReport(${JSON.stringify(studentResults).replace(/"/g, '&quot;')})" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Download Complete Report Sheet
+                    </button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function generateReport(results) {
+            if (!results || results.length === 0) return;
+            
+            // Update report header
+            document.getElementById('reportStudentName').textContent = gdstcSystem.currentStudent.name;
+            document.getElementById('reportAdminNumber').textContent = gdstcSystem.currentStudent.adminNumber;
+            document.getElementById('reportClass').textContent = gdstcSystem.currentStudent.class;
+            document.getElementById('reportAcademicYear').textContent = gdstcSystem.school.academicYear;
+            document.getElementById('reportExamDate').textContent = results[0].date;
+            
+            // Update results table
+            const resultsBody = document.getElementById('reportResultsBody');
+            resultsBody.innerHTML = '';
+            
+            let totalScore = 0;
+            let totalPossible = 0;
+            
+            results.forEach(result => {
+                totalScore += result.score;
+                totalPossible += result.totalMarks;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${result.subjectName}</td>
+                    <td>${result.score}</td>
+                    <td>${result.totalMarks}</td>
+                    <td>${result.percentage}%</td>
+                    <td><strong>${result.grade}</strong></td>
+                    <td>${result.remark}</td>
+                `;
+                resultsBody.appendChild(row);
+            });
+            
+            // Calculate overall stats
+            const averagePercentage = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+            let overallGrade = 'F';
+            
+            if (averagePercentage >= 70) overallGrade = 'A';
+            else if (averagePercentage >= 60) overallGrade = 'B';
+            else if (averagePercentage >= 50) overallGrade = 'C';
+            else if (averagePercentage >= 40) overallGrade = 'D';
+            else if (averagePercentage >= 30) overallGrade = 'E';
+            
+            // Update summary
+            document.getElementById('reportTotalScore').textContent = `${totalScore}/${totalPossible}`;
+            document.getElementById('reportAverage').textContent = `${averagePercentage}%`;
+            document.getElementById('reportOverallGrade').textContent = overallGrade;
+            
+            // Show report page
+            showPage('reportSheet');
+        }
+
+        function viewSingleReport(resultId) {
+            const result = gdstcSystem.results.find(r => r.id === resultId);
+            if (result) {
+                generateReport([result]);
+            }
+        }
+
+        // ========== ADMIN DASHBOARD FUNCTIONS ==========
+        
+        function showAdminDashboard() {
+            showPage('adminDashboard');
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            
+            // Load initial content
+            loadStudentsTable();
+            loadSubjectsForAdmin();
+        }
+
+        // Admin Dashboard Navigation
+        document.getElementById('manageStudentsBtn').addEventListener('click', () => {
+            activateButton('manageStudentsBtn', '.dashboard-nav button');
+            showAdminSection('manageStudentsContent');
+            loadStudentsTable();
+        });
+        
+        document.getElementById('manageExamsBtn').addEventListener('click', () => {
+            activateButton('manageExamsBtn', '.dashboard-nav button');
+            showAdminSection('manageExamsContent');
+            loadExamsTable();
+        });
+        
+        document.getElementById('manageQuestionsBtn').addEventListener('click', () => {
+            activateButton('manageQuestionsBtn', '.dashboard-nav button');
+            showAdminSection('manageQuestionsContent');
+            loadSubjectsForQuestionBank();
+        });
+        
+        document.getElementById('viewResultsBtn').addEventListener('click', () => {
+            activateButton('viewResultsBtn', '.dashboard-nav button');
+            showAdminSection('viewResultsContent');
+            loadAdminResults();
+        });
+        
+        document.getElementById('systemSettingsBtn').addEventListener('click', () => {
+            activateButton('systemSettingsBtn', '.dashboard-nav button');
+            showAdminSection('systemSettingsContent');
+        });
+
+        function loadStudentsTable() {
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+            
+            gdstcSystem.students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.adminNumber}</td>
+                    <td>${student.name}</td>
+                    <td>${student.class}</td>
+                    <td>${student.examsTaken}</td>
+                    <td><span style="color: ${student.status === 'active' ? 'green' : 'red'}">${student.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editStudent(${student.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteStudent(${student.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Search functionality
+            document.getElementById('studentSearch').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('#studentsTableBody tr').forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                });
+            });
+            
+            // Add student button
+            document.getElementById('addStudentBtn').addEventListener('click', () => openStudentModal('add'));
+        }
+
+        function loadExamsTable() {
+            const tbody = document.getElementById('examsTableBody');
+            tbody.innerHTML = '';
+            
+            gdstcSystem.subjects.forEach(subject => {
+                const questionCount = gdstcSystem.questions.filter(q => q.subjectId === subject.id).length;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${subject.name}</td>
+                    <td>${subject.code}</td>
+                    <td>${new Date().toLocaleDateString()}</td>
+                    <td>${subject.duration} mins</td>
+                    <td>${questionCount}/${subject.totalQuestions}</td>
+                    <td><span style="color: green;">Active</span></td>
+                    <td class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editExam(${subject.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn" style="background: #3498db; color: white;" onclick="manageSubjectQuestions(${subject.id})">
+                            <i class="fas fa-question-circle"></i> Questions
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add exam button
+            document.getElementById('addExamBtn').addEventListener('click', () => openExamModal('add'));
+        }
+
+        function loadSubjectsForQuestionBank() {
+            const select = document.getElementById('questionSubject');
+            select.innerHTML = '<option value="">-- Select Subject --</option>';
+            
+            gdstcSystem.subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject.id;
+                option.textContent = `${subject.name} (${subject.code})`;
+                select.appendChild(option);
+            });
+            
+            select.addEventListener('change', function() {
+                const subjectId = parseInt(this.value);
+                if (subjectId) {
+                    loadQuestionsForSubject(subjectId);
+                }
+            });
+            
+            // Add question button
+            document.getElementById('addQuestionBtn').addEventListener('click', () => {
+                const subjectId = parseInt(document.getElementById('questionSubject').value);
+                if (subjectId) {
+                    openQuestionModal('add', subjectId);
+                } else {
+                    alert("Please select a subject first.");
+                }
+            });
+        }
+
+        function loadQuestionsForSubject(subjectId) {
+            const tbody = document.getElementById('questionsTableBody');
+            const subjectQuestions = gdstcSystem.questions.filter(q => q.subjectId === subjectId);
+            
+            if (subjectQuestions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: #666;">
+                            No questions found for this subject. Click "Add New Question" to create questions.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            
+            subjectQuestions.forEach((question, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${question.question}</td>
+                    <td>
+                        ${question.options.map((opt, i) => `
+                            <div>${String.fromCharCode(65 + i)}. ${opt}</div>
+                        `).join('')}
+                    </td>
+                    <td>${String.fromCharCode(65 + question.correctAnswer)}</td>
+                    <td>${question.marks}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editQuestion(${question.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteQuestion(${question.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+
+
+
+
+        function loadAdminResults() {
+            const tbody = document.getElementById('adminResultsBody');
+            tbody.innerHTML = '';
+            
+            gdstcSystem.results.forEach(result => {
+                const student = gdstcSystem.students.find(s => s.id === result.studentId);
+                if (student) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.adminNumber}</td>
+                        <td>${student.class}</td>
+                        <td>${result.subjectName}</td>
+                        <td>${result.score}/${result.totalMarks} (${result.percentage}%)</td>
+                        <td><strong>${result.grade}</strong></td>
+                        <td>${result.date}</td>
+                        <td>
+                            <button class="action-btn" style="background: #3498db; color: white;" onclick="viewStudentReport(${result.studentId}, ${result.subjectId})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            });
+            
+            // Filter functionality
+            document.getElementById('resultSubject').innerHTML = '<option value="">All Subjects</option>';
+            gdstcSystem.subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject.id;
+                option.textContent = subject.name;
+                document.getElementById('resultSubject').appendChild(option);
+            });
+        }
+
+        // ========== MODAL FUNCTIONS ==========
+        
+        function openStudentModal(mode, studentId = null) {
+            const modal = document.getElementById('studentModal');
+            const form = document.getElementById('studentForm');
+            const title = document.getElementById('modalTitle');
+            
+            if (mode === 'add') {
+                title.textContent = "Add New Student";
+                form.reset();
+            } else if (mode === 'edit' && studentId) {
+                const student = gdstcSystem.students.find(s => s.id === studentId);
+                if (student) {
+                    title.textContent = "Edit Student";
+                    document.getElementById('modalAdminNumber').value = student.adminNumber;
+                    document.getElementById('modalStudentName').value = student.name;
+                    document.getElementById('modalStudentClass').value = student.class;
+                }
+            }
+            
+            modal.classList.add('active');
+            
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                
+                const adminNumber = document.getElementById('modalAdminNumber').value;
+                const name = document.getElementById('modalStudentName').value;
+                const studentClass = document.getElementById('modalStudentClass').value;
+                
+                if (mode === 'add') {
+                    const newStudent = {
+                        id: gdstcSystem.students.length > 0 ? Math.max(...gdstcSystem.students.map(s => s.id)) + 1 : 1,
+                        adminNumber,
+                        name,
+                        class: studentClass,
+                        status: "active",
+                        examsTaken: 0,
+                        password: "student123"
+                    };
+                    
+                    gdstcSystem.students.push(newStudent);
+                    alert("Student added successfully!");
+                } else if (mode === 'edit' && studentId) {
+                    const student = gdstcSystem.students.find(s => s.id === studentId);
+                    if (student) {
+                        student.adminNumber = adminNumber;
+                        student.name = name;
+                        student.class = studentClass;
+                        alert("Student updated successfully!");
+                    }
+                }
+                
+                modal.classList.remove('active');
+                loadStudentsTable();
+            };
+        }
+
+        function openExamModal(mode, subjectId = null) {
+            const modal = document.getElementById('examModal');
+            const form = document.getElementById('examForm');
+            const title = document.getElementById('examModalTitle');
+            
+            if (mode === 'add') {
+                title.textContent = "Add New Examination";
+                form.reset();
+                document.getElementById('modalExamDuration').value = gdstcSystem.school.defaultExamDuration;
+            } else if (mode === 'edit' && subjectId) {
+                const subject = gdstcSystem.subjects.find(s => s.id === subjectId);
+                if (subject) {
+                    title.textContent = "Edit Examination";
+                    document.getElementById('modalExamSubject').value = subject.name;
+                    document.getElementById('modalExamCode').value = subject.code;
+                    document.getElementById('modalExamDuration').value = subject.duration;
+                    document.getElementById('modalTotalQuestions').value = subject.totalQuestions;
+                }
+            }
+            
+            modal.classList.add('active');
+            
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('modalExamSubject').value;
+                const code = document.getElementById('modalExamCode').value;
+                const duration = parseInt(document.getElementById('modalExamDuration').value);
+                const totalQuestions = parseInt(document.getElementById('modalTotalQuestions').value);
+                
+                if (mode === 'add') {
+                    const newSubject = {
+                        id: gdstcSystem.subjects.length > 0 ? Math.max(...gdstcSystem.subjects.map(s => s.id)) + 1 : 1,
+                        name,
+                        code,
+                        duration,
+                        totalQuestions
+                    };
+                    
+                    gdstcSystem.subjects.push(newSubject);
+                    alert("Examination added successfully!");
+                } else if (mode === 'edit' && subjectId) {
+                    const subject = gdstcSystem.subjects.find(s => s.id === subjectId);
+                    if (subject) {
+                        subject.name = name;
+                        subject.code = code;
+                        subject.duration = duration;
+                        subject.totalQuestions = totalQuestions;
+                        alert("Examination updated successfully!");
+                    }
+                }
+                
+                modal.classList.remove('active');
+                loadExamsTable();
+            };
+        }
+
+        function openQuestionModal(mode, subjectId, questionId = null) {
+            const modal = document.getElementById('questionModal');
+            const form = document.getElementById('questionForm');
+            const title = document.getElementById('questionModalTitle');
+            const optionsContainer = document.getElementById('optionsContainer');
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            if (mode === 'add') {
+                title.textContent = "Add New Question";
+                form.reset();
+                document.getElementById('modalQuestionMarks').value = 5;
+                
+                // Add 4 default options
+                for (let i = 0; i < 4; i++) {
+                    addOptionInput(i, '');
+                }
+            } else if (mode === 'edit' && questionId) {
+                const question = gdstcSystem.questions.find(q => q.id === questionId);
+                if (question) {
+                    title.textContent = "Edit Question";
+                    document.getElementById('modalQuestionText').value = question.question;
+                    document.getElementById('modalQuestionMarks').value = question.marks;
+                    
+                    // Add existing options
+                    question.options.forEach((option, index) => {
+                        addOptionInput(index, option, index === question.correctAnswer);
+                    });
+                }
+            }
+            
+            modal.classList.add('active');
+            
+            // Add option button
+            document.getElementById('addOptionBtn').onclick = function() {
+                const index = optionsContainer.children.length;
+                addOptionInput(index, '');
+            };
+            
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                
+                const questionText = document.getElementById('modalQuestionText').value;
+                const marks = parseInt(document.getElementById('modalQuestionMarks').value);
+                
+                // Get options
+                const options = [];
+                let correctAnswer = -1;
+                
+                optionsContainer.querySelectorAll('.option-input').forEach((div, index) => {
+                    const input = div.querySelector('input[type="text"]');
+                    const radio = div.querySelector('input[type="radio"]');
+                    
+                    if (input.value.trim()) {
+                        options.push(input.value.trim());
+                        if (radio.checked) {
+                            correctAnswer = index;
+                        }
+                    }
+                });
+                
+                if (options.length < 2) {
+                    alert("Please add at least 2 options.");
+                    return;
+                }
+                
+                if (correctAnswer === -1) {
+                    alert("Please select the correct answer.");
+                    return;
+                }
+                
+                if (mode === 'add') {
+                    const newQuestion = {
+                        id: gdstcSystem.questions.length > 0 ? Math.max(...gdstcSystem.questions.map(q => q.id)) + 1 : 1,
+                        subjectId,
+                        question: questionText,
+                        options,
+                        correctAnswer,
+                        marks
+                    };
+                    
+                   
+
+
+
+
+           gdstcSystem.questions.push(newQuestion);
+                    alert("Question added successfully!");
+                } else if (mode === 'edit' && questionId) {
+                    const question = gdstcSystem.questions.find(q => q.id === questionId);
+                    if (question) {
+                        question.question = questionText;
+                        question.options = options;
+                        question.correctAnswer = correctAnswer;
+                        question.marks = marks;
+                        alert("Question updated successfully!");
+                    }
+                }
+                
+                modal.classList.remove('active');
+                loadQuestionsForSubject(subjectId);
+            };
+        }
+
+        function addOptionInput(index, value = '', isCorrect = false) {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const div = document.createElement('div');
+            div.className = 'option-input';
+            div.innerHTML = `
+                <input type="radio" name="correctOption" ${isCorrect ? 'checked' : ''}>
+                <span style="font-weight: bold; margin-right: 5px;">${String.fromCharCode(65 + index)}.</span>
+                <input type="text" value="${value}" placeholder="Enter option text" style="flex: 1;">
+                <button type="button" class="action-btn delete-btn" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            optionsContainer.appendChild(div);
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        
+        function showPage(pageName) {
+            Object.values(pages).forEach(page => page.classList.remove('active'));
+            pages[pageName].classList.add('active');
+        }
+
+        function activateButton(buttonId, selector) {
+            document.querySelectorAll(selector).forEach(btn => btn.classList.remove('active'));
+            document.getElementById(buttonId).classList.add('active');
+        }
+
+        function showDashboardSection(sectionId) {
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function showAdminSection(sectionId) {
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function logout() {
+            gdstcSystem.currentUser = null;
+            gdstcSystem.currentStudent = null;
+            gdstcSystem.currentExam = null;
+            gdstcSystem.selectedSubject = null;
+            
+            if (gdstcSystem.examTimer) {
+                clearInterval(gdstcSystem.examTimer);
+            }
+            
+            document.getElementById('logoutBtn').style.display = 'none';
+            showPage('landing');
+            
+            // Clear forms
+            document.getElementById('studentLoginForm').reset();
+            document.getElementById('adminLoginForm').reset();
+        }
+
+        // ========== GLOBAL FUNCTIONS (for onclick handlers) ==========
+        
+        window.editStudent = function(studentId) {
+            openStudentModal('edit', studentId);
+        };
+
+        window.deleteStudent = function(studentId) {
+            if (confirm("Are you sure you want to delete this student?")) {
+                const index = gdstcSystem.students.findIndex(s => s.id === studentId);
+                if (index !== -1) {
+                    gdstcSystem.students.splice(index, 1);
+                    loadStudentsTable();
+                }
+            }
+        };
+
+        window.editExam = function(subjectId) {
+            openExamModal('edit', subjectId);
+        };
+
+        window.manageSubjectQuestions = function(subjectId) {
+            document.getElementById('questionSubject').value = subjectId;
+            document.getElementById('manageQuestionsBtn').click();
+            loadQuestionsForSubject(subjectId);
+        };
+
+        window.editQuestion = function(questionId) {
+            const question = gdstcSystem.questions.find(q => q.id === questionId);
+            if (question) {
+                document.getElementById('questionSubject').value = question.subjectId;
+                document.getElementById('manageQuestionsBtn').click();
+                loadQuestionsForSubject(question.subjectId);
+                
+                // Open edit modal after a short delay
+                setTimeout(() => openQuestionModal('edit', question.subjectId, questionId), 100);
+            }
+        };
+
+        window.deleteQuestion = function(questionId) {
+            if (confirm("Are you sure you want to delete this question?")) {
+                const index = gdstcSystem.questions.findIndex(q => q.id === questionId);
+                if (index !== -1) {
+                    gdstcSystem.questions.splice(index, 1);
+                    const subjectId = parseInt(document.getElementById('questionSubject').value);
+                    if (subjectId) {
+                        loadQuestionsForSubject(subjectId);
+                    }
+                }
+            }
+        };
+
+        window.viewStudentReport = function(studentId, subjectId) {
+            const student = gdstcSystem.students.find(s => s.id === studentId);
+            const result = gdstcSystem.results.find(r => r.studentId === studentId && r.subjectId === subjectId);
+            
+            if (student && result) {
+                // Temporarily set current student for report generation
+                const originalStudent = gdstcSystem.currentStudent;
+                gdstcSystem.currentStudent = student;
+                generateReport([result]);
+                gdstcSystem.currentStudent = originalStudent;
+            }
+        };
+
+        // ========== INITIALIZATION ==========
+        
+        // Close modals when clicking X
+        document.getElementById('closeStudentModal').addEventListener('click', () => {
+            document.getElementById('studentModal').classList.remove('active');
+        });
+        
+        document.getElementById('closeExamModal').addEventListener('click', () => {
+            document.getElementById('examModal').classList.remove('active');
+        });
+        
+        document.getElementById('closeQuestionModal').addEventListener('click', () => {
+            document.getElementById('questionModal').classList.remove('active');
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Navigation buttons
+        document.getElementById('homeBtn').addEventListener('click', () => showPage('landing'));
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('studentLogoutBtn').addEventListener('click', logout);
+        document.getElementById('adminLogoutBtn').addEventListener('click', logout);
+
+        // Save settings
+        document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+            gdstcSystem.school.academicYear = document.getElementById('academicYear').value;
+            gdstcSystem.school.passingScore = parseInt(document.getElementById('passingScore').value);
+            gdstcSystem.school.defaultExamDuration = parseInt(document.getElementById('examDuration').value);
+            alert("Settings saved successfully!");
+        });
+
+        console.log("GDSTC KHS Examination System Loaded Successfully");
+    </script>
+</body>
+</html>
+
