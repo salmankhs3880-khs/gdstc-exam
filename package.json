@@ -1,0 +1,1 @@
+{\n  "name": "gdstc-exam",\n  "version": "1.0.0",\n  "description": "Backend Node.js project for GDSTC Exam",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "author": "salmankhs3880-khs",\n  "license": "ISC"\n}
